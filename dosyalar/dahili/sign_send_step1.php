@@ -1,7 +1,5 @@
 <?php
-
 require_once("inc.php");
-
 require __DIR__ . "/otp_function.php";
 $hata_mesaj = '<div class="alert alert-danger"><strong>Uyarı!</strong> Bir hata oluştu! Lütfen tekrar deneyiniz.</div>';
 $tebrik_mesaj = '<div class="alert alert-success"><strong>Teşekkürler!</strong> Üyeliğiniz başarıyla gerçekleşmiştir. Telefon numaranıza gönderilen doğrulama kodunu onaylayınız. <a href="/uyelik">Sisteme Giriş Yapmak için tıklayınız.</a> </div><script>document.getElementById("sign_form").reset();</script>';

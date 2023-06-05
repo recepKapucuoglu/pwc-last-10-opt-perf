@@ -264,36 +264,7 @@ include('inc.php');
 											</a>
 											<ul class="sub-altmenu" id="another_filter_1">
 												<?php 
-												//  $sql = "SELECT kategoriler, GROUP_CONCAT(DISTINCT kategoriler SEPARATOR ',') AS kategoriler FROM egitimlerimiz_filter WHERE types != 'E-Learning' OR types IS null GROUP BY kategoriler";
-
-																								 
-												//  $categories = $db->query($sql);
-												 
-												//  $allCategories = implode(',', array_map(function($item) {
-												// 	 return $item['kategoriler'];
-												//  }, $categories));
-												
-												//  // Tüm kategorileri virgülle ayrılmış bir diziye dönüştürün ve yinelenen öğeleri çıkarın
-												//  $uniqueCategories = array_unique(explode(',', $allCategories));
-												 
-												//  // Tekrar eden öğeleri çıkarın ve sonuç dizisini oluşturun
-												//  $result = array();
-												//  foreach($uniqueCategories as $category) {
-												// 	 $result[] = array('kategoriler' => $category);
-												//  }
-												 
-												//  $output = array();
-												//  foreach ($result as $value) {
-												// 	 $categories = explode(',', $value['kategoriler']);
-												// 	 foreach ($categories as $category) {
-												// 		 $trimmed_category = trim($category);
-												// 		 if (!in_array($trimmed_category, $output)) {
-												// 			if($trimmed_category!="")
-												// 			 $output[] = $trimmed_category;
-												// 		 }
-												// 	 }
-												//  }
-												//  $categories=$output;
+											
 											  $categories=	$db->get('active_categories_calender');
 												foreach ($categories as $category) {
 													?>
@@ -326,34 +297,7 @@ include('inc.php');
 											<ul class="sub-altmenu col-md-3" id="e-learning">
 												<?php 
 												
-												//  $sql = "SELECT kategoriler, GROUP_CONCAT(DISTINCT kategoriler SEPARATOR ',') AS kategoriler FROM education_calender_list WHERE types = 'E-Learning' GROUP BY kategoriler";
-
-												//  $categories = $db->query($sql);
-												 
-												//  $allCategories = implode(',', array_map(function($item) {
-												// 	 return $item['kategoriler'];
-												//  }, $categories));
-												 
-												//  // Tüm kategorileri virgülle ayrılmış bir diziye dönüştürün ve yinelenen öğeleri çıkarın
-												//  $uniqueCategories = array_unique(explode(',', $allCategories));
-												 
-												//  // Tekrar eden öğeleri çıkarın ve sonuç dizisini oluşturun
-												//  $result = array();
-												//  foreach($uniqueCategories as $category) {
-												// 	 $result[] = array('kategoriler' => $category);
-												//  }
-												 
-												//  $output = array();
-												//  foreach ($result as $value) {
-												// 	 $categories = explode(',', $value['kategoriler']);
-												// 	 foreach ($categories as $category) {
-												// 		 $trimmed_category = trim($category);
-												// 		 if (!in_array($trimmed_category, $output)) {
-												// 			 $output[] = $trimmed_category;
-												// 		 }
-												// 	 }
-												//  }
-												//  $categories=$output;
+												
 												$categories=$db->get('active_categories_elearning');
 												foreach ($categories as $category) {
 													?>
@@ -399,7 +343,7 @@ include('inc.php');
 					<li><a href="/egitim-takvimi.php">Eğitim Takvimi</a></li>
 					<li><a href="/hakkimizda">Hakkımızda</a></li>
 					<li><a href="/sss">Sıkça Sorulan Sorular</a></li>
-					<li><a href="/blog">Blog</a></li>
+					<!-- <li><a href="/blog">Blog</a></li> -->
 					<li><a href="/iletisim">İletişim</a></li>
 				</ul>
 			</div>

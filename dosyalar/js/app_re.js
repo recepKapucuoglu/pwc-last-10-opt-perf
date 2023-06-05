@@ -460,6 +460,28 @@ function afterLoad() {
 
 }
 
+//like
+
+$(".favori").click(function () {
+    var params = 'id=' + $(this).attr('id');
+    $.ajax({
+        type: 'POST',
+        url: 'dosyalar/dahili/education_like_unlike.php',
+        data: params,
+        dataType: 'json',
+        success: function (cevap) {
+            if (cevap.status == 'ok') {
+                growl(cevap.msg);
+                $('#' + cevap.id).addClass("aktif");
+            }
+            else {
+                growl(cevap.msg, 'error', 'Hata !');
+            }
+        }
+    });
+
+});
+
 const egitimProgramlari = document.getElementById('egitimProgramlari');
 const altmenu = document.getElementById('altmenu');
 const altmenuTitle = document.getElementsByClassName('main-altmenu__title');
@@ -473,6 +495,8 @@ const mobilMenu = document.getElementById('mobil-profil-menu');
 const profilGoruntule = document.getElementById('profil-goruntule');
 const cozumOrtak = document.getElementById('cozum_ortakligi_platformu_1');
 const altMenuLi = document.getElementsByClassName('main-altmenu__li');
+
+
 
 egitimProgramlari.addEventListener('click', function () {
     if (altmenu.style.display == 'block') {
@@ -1584,47 +1608,28 @@ function profil_send() {
     }
 }
 
-//like
 
-$(".favori").click(function () {
-    var params = 'id=' + $(this).attr('id');
-    $.ajax({
-        type: 'POST',
-        url: 'dosyalar/dahili/education_like_unlike.php',
-        data: params,
-        dataType: 'json',
-        success: function (cevap) {
-            if (cevap.status == 'ok') {
-                growl(cevap.msg);
-                $('#' + cevap.id).addClass("aktif");
-            }
-            else {
-                growl(cevap.msg, 'error', 'Hata !');
-            }
-        }
-    });
 
-});
+// $(".favorireset").click(function () {
+//     var seo_url =$(this).attr('id');
+//     console.log(seo_url);
+//     $.ajax({
+//         type: 'POST',
+//         url: 'dosyalar/dahili/education_unlike.php',
+//         data: seo_url,
+//         dataType: 'json',
+//         success: function (cevap) {
+//             if (cevap.status == 'ok') {
+//                 window.location.href = "https://www.okul.pwc.com.tr/dashboard-favorilerim.php";
 
-$(".favorireset").click(function () {
-    var params = 'id=' + $(this).attr('id');
-    $.ajax({
-        type: 'POST',
-        url: 'dosyalar/dahili/education_unlike.php',
-        data: params,
-        dataType: 'json',
-        success: function (cevap) {
-            if (cevap.status == 'ok') {
-                window.location.href = "https://www.okul.pwc.com.tr/dashboard-favorilerim.php";
+//             }
+//             else {
+//                 growl(cevap.msg, 'error', 'Hata !');
+//             }
+//         }
+//     });
 
-            }
-            else {
-                growl(cevap.msg, 'error', 'Hata !');
-            }
-        }
-    });
-
-});
+// });
 
 jQuery(document).ready(function ($) {
     // Get current path and find target link
@@ -1991,6 +1996,7 @@ $(document).ready(function () {
         });
     }
 });
+
 
 let menuState = false;
 

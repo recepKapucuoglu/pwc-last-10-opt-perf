@@ -225,7 +225,10 @@ if ($_SESSION['dashboardUser']){
 						</div>
 						<?php if($webex<>1){ ?>
 						<p style="font-size:14px; line-height:16px; text-align:left; font-weight:bold"><a href="iptal_ve_indirim_politikasi.php" target="_blank">İptal ve İndirim Politikamızı incelemek için tıklayınız.</a></p>
-						<?php } ?>
+						<?php } 
+						if($types == 'E-Learning'){
+
+						?>
 						
 						<table class="egitim-detay_tablo">
 							<tr>
@@ -304,7 +307,7 @@ if ($_SESSION['dashboardUser']){
 								<td style="font-weight:bold"><?php echo number_format($indirim, 2, ',', '.'); ?> TL + KDV</td>
 							</tr>
 						</table>
-
+					<?php	} ?>
 						<div class="bilesen-detay">
 							<div class="baslik">Eğitim Detayları</div>
 							<div class="bilesenic">

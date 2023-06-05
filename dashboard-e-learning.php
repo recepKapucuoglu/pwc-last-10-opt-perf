@@ -41,6 +41,7 @@ if ($_SESSION['dashboardUser']) { ?>
 												</div>
 										<!-- echo "<div class=\"alert alert-danger\">Kayıt yaptırılmış eğitim bulunmamaktadır.</div>"; -->
 								<?php	} else {
+
 										echo "<div class=\"dbkutuicerik\"><div class=\"listeler kucukresim\">";
 										$db->where('user_id', $_SESSION['dashboardUserId']);
 										$db->where('elearning_user_code', null, 'IS NOT');
