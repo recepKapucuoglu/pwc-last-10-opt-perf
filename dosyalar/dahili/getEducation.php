@@ -1,7 +1,4 @@
 <?php require_once('_db.php'); 
-	
-	
-	
 	if ($_SESSION['dashboardUser']){
 		$db->where('user_id', $_SESSION['dashboardUserId']);
 		$resultsFavorite = $db->get('web_user_favorite');
@@ -10,17 +7,14 @@
 			$favori_array[] = $valueFavorite['edu_id'];
 		}
 	}
-	
-	//Sayfa hesaplama
-								
+	//Sayfa hesaplama							
 	$more = intval($_POST['more']);
 	$closed = intval($_POST['closed']);
 	// 10 kayıt için
 	$list = $more * 15;
 	$next = $more + 1;
-	$prev = $more - 1;
-	
-	
+	$prev = $more - 1;	
+
 	$sort = intval($_POST['id']);
 	$egitimCheck = $_POST['egitimCheck'];
 	$listType = $_POST['listType'];
@@ -63,11 +57,8 @@
 	foreach ($resultsCalender as $valueCalender) { 
 		$acik_egitimler[]=$valueCalender['edu_id'];
 	}
-	
-	
 	$acikEgitimResult = array_slice($resultsCalender, $list, 15);
 	$kapaliEgitimGeriyeKalan = 15 - count($acikEgitimResult);
-	
 	
 	// Kapalı Eğitim Sorgusu Geriye kalan
 	$db->where('durum', 1);

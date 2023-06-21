@@ -37,7 +37,11 @@
 					  case "application/pdf"            :$typeResult="A"; $typeUzanti=".pdf"; break;
 					  case "application/msword"           :$typeResult="A"; $typeUzanti=".doc"; break;
 					  case "application/vnd.openxmlformats-officedocument.wordprocessingml.document"          :$typeResult="A"; $typeUzanti=".docx"; break;
-					 
+					  case "image/jpg"            :$typeResult="A"; $typeUzanti=".jpg"; break;
+					  case "image/jpeg"           :$typeResult="A"; $typeUzanti=".jpg"; break;
+					  case "image/pjpeg"          :$typeResult="A"; $typeUzanti=".pjpeg"; break;
+					  case "image/gif"            :$typeResult="A"; $typeUzanti=".gif"; break;
+					  case "image/png"            :$typeResult="A"; $typeUzanti=".png"; break;
 					}			
 				if(($resim <> "") && ($typeResult=="A")) {
 					$resim = $resim_baslik.$typeUzanti;
@@ -89,7 +93,7 @@
 									<div class="col-md-3">
 										<input type="file" class="default"  name="resim"/>
 										<span class="help-block">
-											 Sadece <code>pdf,docx, doc</code>
+											 Sadece <code>pdf,docx,doc,jpeg,jpg,pjpeg,gif,png</code>
 										</span>
 									</div>
 								</div>
@@ -120,7 +124,7 @@
 				</header>
 				<div class="card-body">
 					<div id="islemList">
-							<?php $dizin = glob("../dosyalar/images/docs/*.{pdf,doc,docx}", GLOB_BRACE);
+							<?php $dizin = glob("../dosyalar/images/docs/*.{pdf,doc,docx,jpeg,jpg,pjpeg,gif,png}", GLOB_BRACE);
 							asort($dizin);
 							
 							$i=0;

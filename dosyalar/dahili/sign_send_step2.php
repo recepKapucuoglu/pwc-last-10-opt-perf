@@ -68,7 +68,7 @@ if ($_POST['email']) {
                             $_SESSION['dashboardUser'] = $value['email'];
                             $_SESSION['dashboardUserStatus']=$value['status'];
                         }
-                        $dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now());
+                        $dataLogon = array('expression_time' => $db->now());
                         $db->where('phone', $telefonNumber);
                         $idLogon = $db->update('web_user', $dataLogon);
                         $random = (time());

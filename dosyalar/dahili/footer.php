@@ -55,10 +55,10 @@
 						<div class="baslik">Kolay Erişim</div>
 						<div class="bilesenic">
 							<ul class="bol2" style="-webkit-column-count: 2;">	
-								<li><a href="">Eğitim Takvimi</a></li>
-								<li><a href="">Hakkımızda</a></li>
-								<li><a href="">Sıkça Sorulan Sorular</a></li>
-								<li><a href="">Blog</a></li>
+								<li><a href="egitim-takvimi.php">Eğitim Takvimi</a></li>
+								<li><a href="hakkimizda">Hakkımızda</a></li>
+								<li><a href="sss">Sıkça Sorulan Sorular</a></li>
+								<li><a href="blog">Blog</a></li>
 							</ul>
 						</div>
 					</div>

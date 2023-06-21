@@ -278,6 +278,18 @@
 				$('#seo_url').val(new_url_adres);
 
 			}
+			else { //diğer eğitimler ise / type_id null ise 
+			type_id = null;
+			$('.gizleelearning').show();
+			$('input[name="egitim_tarih"]').attr('required', true);
+			$('input[name="baslangic_saat"]').attr('required', true);
+			$('input[name="bitis_saat"]').attr('required', true);
+
+			//unique seourl oluşturalım
+			var url_adres = dataEgitim[0].text + '-' + $("input[name='egitim_tarih']").val() + '-' + $("input[name='baslangic_saat']").val();
+			var new_url_adres = createSEOLink(url_adres);
+			$('#seo_url').val(new_url_adres);
+		}
 
 		} else { //diğer eğitimler ise / type_id null ise 
 			type_id = null;

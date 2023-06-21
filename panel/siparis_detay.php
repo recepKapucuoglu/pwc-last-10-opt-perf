@@ -67,27 +67,53 @@
 						$res=$db->getOne('education_calender_list');
 						$education_type=$res['types'];
 			} else if ($id) {
-				$path = sha1(uniqid('', true));
-
-				$data = [
-					"odenen_tutar" => $odenen_tutar_update,
-					"elearning_detail_path"=>$path,
-				];
-				$db->where('id', $id);
-				$upd = $db->update('education_order_form', $data);
-				//elearning_user_code güncelle.
-				$data_elearning=[
-					"elearning_user_code"=>$elearning_user_code_send,
-				];
+				//girilen egitim elearning mi ? 
 				$db->where('id',$id); 
 				$res=$db->getOne('education_order_form');
-				$web_user_id=$res['user_id'];
-				$db->where('id',$web_user_id);
-				$upd_elearning = $db->update('web_user', $data_elearning);
-				if ($upd && $upd_elearning) {
-					echo '<div class="alert alert-success"><strong>Bilgilendirme!</strong>Ödenen Tutarı Güncellediniz.</div> <script> setTimeout(function(){
-						window.location.href = "https://www.okul.pwc.com.tr/panel/siparis_detay.php?id=' . $id . '&edu_id=' . $edu_cal_id . '";
-					 }, 2000);</script>';
+				$db->where('id',$res['edu_cal_id']);
+				$res=$db->getOne('education_calender_list');
+				$types=$res['types'];
+				//elearning  ise
+				if($types=='E-Learning'){
+					//ödenen tutarı ve elearning detay sayfa linkini güncelle.
+					$path = sha1(uniqid('', true));
+					$data = [
+						"odenen_tutar" => $odenen_tutar_update,
+						"elearning_detail_path"=>$path,
+					];
+					$db->where('id', $id);
+					$upd = $db->update('education_order_form', $data);
+					//elearning_user_code güncelle.
+					$data_elearning=[
+					"elearning_user_code"=>$elearning_user_code_send,
+					];
+					$db->where('id',$id); 
+					$res=$db->getOne('education_order_form');
+					$web_user_id=$res['user_id'];
+					$db->where('id',$web_user_id);
+					$upd_elearning = $db->update('web_user', $data_elearning);
+					//bilgi mesajı ver
+					if ($upd && $upd_elearning) {
+						echo '<div class="alert alert-success"><strong>Bilgilendirme!</strong>Ödenen Tutarı ve Elearning kullanıcı bilgisini Güncellediniz.</div> <script> setTimeout(function(){
+							window.location.href = "https://www.okul.pwc.com.tr/panel/siparis_detay.php?id=' . $id . '&edu_id=' . $edu_cal_id . '";
+						 }, 2000);</script>';
+					}
+				}
+				else {
+					//elearning degilse 
+					//ödenen tutarı güncelle
+					$data = [
+						"odenen_tutar" => $odenen_tutar_update,
+					];
+					$db->where('id', $id);
+					$upd = $db->update('education_order_form', $data);
+					if ($upd) {
+						echo '<div class="alert alert-success"><strong>Bilgilendirme!</strong>Ödenen Tutarı Güncellediniz.</div> <script> setTimeout(function(){
+							window.location.href = "https://www.okul.pwc.com.tr/panel/siparis_detay.php?id=' . $id . '&edu_id=' . $edu_cal_id . '";
+						 }, 2000);</script>';
+					}
+				}
+				
 					$db->where('id', $id);
 					$results = $db->get('education_order_form_list');
 					foreach ($results as $value) {
@@ -120,7 +146,7 @@
 						$res=$db->getOne('education_calender_list');
 						$education_type=$res['types'];
 					
-				}
+				
 			}
 
 			?>

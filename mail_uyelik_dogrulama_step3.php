@@ -80,7 +80,7 @@ require __DIR__ . '/dosyalar/dahili/otp_function.php';
     $mail->setLanguage('tr', '/language');
 
     // Set email format to HTML
-    $mail->Subject = 'Business School - Şifrenizi Sıfırlayın';
+    $mail->Subject = 'Business School - Hesabınızı Doğrulayın';
     $mail->msgHTML($body);
 
     if ($mail->send()) {

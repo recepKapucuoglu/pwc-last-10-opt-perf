@@ -459,28 +459,7 @@ function afterLoad() {
     });
 
 }
-
-//like
-
-$(".favori").click(function () {
-    var params = 'id=' + $(this).attr('id');
-    $.ajax({
-        type: 'POST',
-        url: 'dosyalar/dahili/education_like_unlike.php',
-        data: params,
-        dataType: 'json',
-        success: function (cevap) {
-            if (cevap.status == 'ok') {
-                growl(cevap.msg);
-                $('#' + cevap.id).addClass("aktif");
-            }
-            else {
-                growl(cevap.msg, 'error', 'Hata !');
-            }
-        }
-    });
-
-});
+document.addEventListener("DOMContentLoaded", function (event) {
 
 const egitimProgramlari = document.getElementById('egitimProgramlari');
 const altmenu = document.getElementById('altmenu');
@@ -493,14 +472,11 @@ const yoneticiEgitimleri = document.getElementById('yonetici_egitimleri_1');
 const elearning = document.getElementById('e-learning');
 const mobilMenu = document.getElementById('mobil-profil-menu');
 const profilGoruntule = document.getElementById('profil-goruntule');
-const cozumOrtak = document.getElementById('cozum_ortakligi_platformu_1');
 const altMenuLi = document.getElementsByClassName('main-altmenu__li');
-
-
 
 egitimProgramlari.addEventListener('click', function () {
     if (altmenu.style.display == 'block') {
-        altmenu.style.display = 'none'
+        altmenu.style.display = 'none' 
     } else {
         altmenu.style.display = 'block'
     }
@@ -533,8 +509,7 @@ for (var i = 0; i < subList.length; i++) {
 
 
 for (var i = 0; i < altMenuLi.length; i++) {
-    altMenuLi[i].addEventListener("click", function () {
-        console.log(altMenuLi[i])
+    altMenuLi[i].addEventListener("click", function (event) {
         for (var j = 0; j < altMenuLi.length; j++) {
             altMenuLi[j].classList.remove("selected-altMenuLi");
         }
@@ -548,28 +523,19 @@ for (let i = 0; i < altmenuTitle.length; i++) {
             anotherFilter.style.display = "block";
             yoneticiEgitimleri.style.display = "none";
             elearning.style.display = "none";
-            cozumOrtak.style.display = "none";
         } else if (altmenuTitle[i].id == "yonetici_egitimleri") {
             yoneticiEgitimleri.style.display = "block";
             anotherFilter.style.display = "none";
             elearning.style.display = "none";
-            cozumOrtak.style.display = "none";
         } else if (altmenuTitle[i].id == "elearning_filter") {
             elearning.style.display = "block";
-            cozumOrtak.style.display = "none";
             yoneticiEgitimleri.style.display = "none";
             anotherFilter.style.display = "none";
         } else if (altmenuTitle[i].id == "sirket_kurumlar") {
             anotherFilter.style.display = "none";
             elearning.style.display = "none";
             yoneticiEgitimleri.style.display = "none";
-            cozumOrtak.style.display = "none";
-        } else if (altmenuTitle[i].id == "cozum_ortakligi_platformu") {
-            cozumOrtak.style.display = "block";
-            anotherFilter.style.display = "none";
-            elearning.style.display = "none";
-            yoneticiEgitimleri.style.display = "none";
-        }
+        } 
     });
 };
 
@@ -588,7 +554,7 @@ for (let i = 0; i < altmenuTitle.length; i++) {
         }
     });
 }
-
+});
 // SocialThinks
 window.addEventListener('load', function (event) {
 
@@ -1608,28 +1574,47 @@ function profil_send() {
     }
 }
 
+//like
 
+$(".favori").click(function () {
+    var params = 'id=' + $(this).attr('id');
+    $.ajax({
+        type: 'POST',
+        url: 'dosyalar/dahili/education_like_unlike.php',
+        data: params,
+        dataType: 'json',
+        success: function (cevap) {
+            if (cevap.status == 'ok') {
+                growl(cevap.msg);
+                $('#' + cevap.id).addClass("aktif");
+            }
+            else {
+                growl(cevap.msg, 'error', 'Hata !');
+            }
+        }
+    });
 
-// $(".favorireset").click(function () {
-//     var seo_url =$(this).attr('id');
-//     console.log(seo_url);
-//     $.ajax({
-//         type: 'POST',
-//         url: 'dosyalar/dahili/education_unlike.php',
-//         data: seo_url,
-//         dataType: 'json',
-//         success: function (cevap) {
-//             if (cevap.status == 'ok') {
-//                 window.location.href = "https://www.okul.pwc.com.tr/dashboard-favorilerim.php";
+});
 
-//             }
-//             else {
-//                 growl(cevap.msg, 'error', 'Hata !');
-//             }
-//         }
-//     });
+$(".favorireset").click(function () {
+    var params = 'id=' + $(this).attr('id');
+    $.ajax({
+        type: 'POST',
+        url: 'dosyalar/dahili/education_unlike.php',
+        data: params,
+        dataType: 'json',
+        success: function (cevap) {
+            if (cevap.status == 'ok') {
+                window.location.href = "https://www.okul.pwc.com.tr/dashboard-favorilerim.php";
 
-// });
+            }
+            else {
+                growl(cevap.msg, 'error', 'Hata !');
+            }
+        }
+    });
+
+});
 
 jQuery(document).ready(function ($) {
     // Get current path and find target link
@@ -1996,7 +1981,6 @@ $(document).ready(function () {
         });
     }
 });
-
 
 let menuState = false;
 

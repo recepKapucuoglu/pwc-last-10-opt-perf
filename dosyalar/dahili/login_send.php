@@ -43,8 +43,10 @@ if ($_POST['email_login']) {
 				$_SESSION['dashboardUserName'] = $value['fullname'];
 				$_SESSION['dashboardUserId'] = $value['id'];
 				$_SESSION['dashboardUserPhone'] = $value['phone'];
+				$_SESSION['dashboardUserMailStatus'] = $value['mail_status'];
+
 			}
-			$dataLogon = array('last_login_date' => $db->now() ,'last_page_url' => $last_page_url);
+			$dataLogon = array('last_page_url' => $last_page_url);
 			$db->where('phone', $_SESSION['dashboardUserPhone']);
 			$idLogon = $db->update('web_user', $dataLogon);
 			if ($last_page_url <> "")
@@ -80,8 +82,10 @@ if ($_POST['email_login']) {
 				$_SESSION['dashboardUserName'] = $value['fullname'];
 				$_SESSION['dashboardUserId'] = $value['id'];
 				$_SESSION['dashboardUserPhone'] = $value['phone'];
+				$_SESSION['dashboardUserMailStatus'] = $value['mail_status'];
+
 			}
-			$dataLogon = array('last_login_date' => $db->now() ,'last_page_url' => $last_page_url);
+			$dataLogon = array('last_page_url' => $last_page_url);
 			$db->where('email', $_SESSION['dashboardUser']);
 			$idLogon = $db->update('web_user', $dataLogon);
 			if ($last_page_url <> "")

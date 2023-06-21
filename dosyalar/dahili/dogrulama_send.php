@@ -85,7 +85,7 @@ if ($_SESSION['dashboardUser']) {
 				// $_SESSION['dashboardUserStatus'] = $value['status'];
 				$_SESSION['dashboardUserMailStatus'] = $value['mail_status'];
 			}
-			$dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now());
+			$dataLogon = array( 'expression_time' => $db->now());
 			$db->where('email', $_SESSION['dashboardUser']);
 			$idLogon = $db->update('web_user', $dataLogon);
 			$random = crc16(time());

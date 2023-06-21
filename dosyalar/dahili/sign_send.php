@@ -149,7 +149,7 @@ if ($_POST['adsoyad']) {
                             $_SESSION['dashboardUserId'] = $value['id'];
                             $_SESSION['dashboardUserPhone'] = $value['phone'];
                         }
-                        $dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now());
+                        $dataLogon = array('expression_time' => $db->now());
                         $db->where('email', $_SESSION['dashboardUser']);
                         $idLogon = $db->update('web_user', $dataLogon);
                         $random = (time());

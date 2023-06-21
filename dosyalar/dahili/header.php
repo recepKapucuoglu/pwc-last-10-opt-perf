@@ -268,7 +268,7 @@ include('inc.php');
 											  $categories=	$db->get('active_categories_calender');
 												foreach ($categories as $category) {
 													?>
-													<li class="sub-list" id="<?php echo $category['category_baslik'] ?>" >
+													<li class="sub-list" id="<?php echo $category['category_baslik'] ?>" data-="<?php echo $category['category_seo_url']; ?>" >
 														<span class="sub-altmenu__li">
 															<?php echo $category['category_baslik'] ?>
 														</span>
@@ -281,12 +281,12 @@ include('inc.php');
 										</li>
 										<li class="main-altmenu__li">
 											<a class="main-altmenu__title" id="yonetici_egitimleri">
-												<span>Yönetici Eğitimleri</span>
+												<span>Uzmanlık Programları</span>
 												<img src="dosyalar/images/arrow-right.png" class="filter-white" />
 											</a>
 											<ul class="sub-altmenu col-md-3" id="yonetici_egitimleri_1">
 												<li class="sub-list">
-													 <span><a style="padding:0px;background-color:transparent !important; color:#fff !important;" href="/next-business/">Next in Business</a></span>
+													 <span><a style="padding:0px;background-color:transparent !important; color:#fff !important;" href="/next-in-business">Next in Business</a></span>
 												</li>
 											</ul>
 										</li>
@@ -319,15 +319,10 @@ include('inc.php');
 											</a>
 										</li>
 										<li class="main-altmenu__li">
-											<a class="main-altmenu__title" id="cozum_ortakligi_platformu">
-												<span>Platform / Zirve</span>
+											<a href="/platform" class="main-altmenu__title" id="cozum_ortakligi_platformu">
+												<span>21. Çözüm Ortaklığı Platformu</span>
 												<img src="dosyalar/images/arrow-right.png" class="filter-white" />
 											</a>
-											<ul class="sub-altmenu col-md-3" id="cozum_ortakligi_platformu_1">
-												<li class="sub-list">
-													<span><a style="padding:0px; background-color:transparent !important; color:#fff !important" href="/platform/" > 21. Çözüm Ortaklığı Platformu </a></span>
-												</li>
-											</ul>
 										</li>
 										<li class="main-altmenu__li">
 											<a href="/egitimlerimiz" class="main-altmenu__title">
@@ -351,25 +346,34 @@ include('inc.php');
 	</header>
 	<main>
 
-		<script>
-			var type_id;
-			$("#elearning_filter").click(function () {
-				 type_id = $(this).attr('id');
-			});
-			$("#another_filter").click(function () {
-				 type_id = $(this).attr('id');
+	<script>
+ 
+ var type_id;
+ var category_seo_url;
+ document.addEventListener("DOMContentLoaded", function (event) {
 
-			});
-			$(".sub-list").click(function () {
-				var category_id = $(this).attr('id');
+$("#elearning_filter").click(function () {
+	type_id = $(this).attr('id');
+});
+$("#another_filter").click(function () {
+	type_id = $(this).attr('id');
+});
+$(".sub-list").click(function () {
+   var category_id = $(this).attr('id');
+   category_seo_url = $(this).attr('data-'); // data- değerini almak için attr() yöntemini kullanın
+   $.ajax({
+	   url: "/header_filter_first.php",
+	   type: "POST",
+	   data: { 
+		category_id: category_id ,
+		category_seo_url:category_seo_url,
+		type_id:type_id 
+		},
+	   success: function (cevap) {
+		   $('.child-altmenu').html(cevap);
+	   }
+   });
+});
+ });
 
-				$.ajax({
-					url: "/header_filter_first.php",
-					type: "POST",
-					data: { category_id: category_id , type_id:type_id },
-					success: function (cevap) {
-						$('.child-altmenu').html(cevap);
-					}
-				});
-			});
-		</script>
+</script>

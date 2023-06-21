@@ -4,12 +4,13 @@ require_once("dosyalar/dahili/_db.php");
 //elearning token service.
 class ElearningService
 {
-    private $tokenUrl = 'https://lms-staging.okul.pwc.com.tr/api/TokenAuth/Authenticate';
+    //private $tokenUrl = 'https://lms-staging.okul.pwc.com.tr/api/TokenAuth/Authenticate';
+    private $tokenUrl = 'https://pwc.elearningsolutions.net/api/TokenAuth/Authenticate';
 
     private $username = 'service.user';
     private $password = '2CHW:Kbe!9nPA-JWg.x9';
 
-    private $CreateAuthUrl = 'https://lms-staging.okul.pwc.com.tr/api/services/app/externalapi/CreateAuthToken';
+    private $CreateAuthUrl = 'https://pwc.elearningsolutions.net/api/services/app/externalapi/CreateAuthToken';
 
     private $userCode;
 
@@ -26,19 +27,6 @@ class ElearningService
             'usernameOrEmailAddress' => $this->username,
             'password' => $this->password
         );
-
-        // POST isteği yapılacak URL'yi ayarla
-        // $ch = curl_init($this->tokenUrl);
-
-        // // POST isteği için gerekli ayarları yap
-        // curl_setopt($ch, CURLOPT_POST, true);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // // İstek gönder ve yanıtı al
-        // $response = curl_exec($ch);
-
         $ch = curl_init();
 
                 curl_setopt($ch, CURLOPT_URL, $this->tokenUrl );
@@ -118,7 +106,7 @@ class ElearningService
 
     public function loginElearningUser(){
       $createUserToken= $this->createUserToken();
-      $redirectUrl='https://lms-staging.okul.pwc.com.tr/Account/LoginWithAuthToken/?p='.$createUserToken.'&returnUrl=lms/trainings/mytrainings';
+      $redirectUrl='https://pwc.elearningsolutions.net/Account/LoginWithAuthToken/?p='.$createUserToken.'&returnUrl=lms/trainings/mytrainings';
       header('Location: '.$redirectUrl.' ');
       exit();
     }

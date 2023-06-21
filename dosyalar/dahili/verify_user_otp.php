@@ -34,7 +34,7 @@ if ($_SESSION['dashboardUser'] && $_SESSION['dashboardUser']!="uyeol_step1" && $
                 Girdiğiniz doğrulama kodu yanlış, lütfen tekrar deneyiniz.</div>';
     } else {
         // Kullanıcının doğrulandığını veritabanına işliyoruz...
-        $data = array('status' => 1, 'activation_code' => '');
+        $data = ['status' => 1, 'activation_code' => '' ,'last_login_date' => $db->now()];
         // Hangi kullanıcı olduğunu belirtiyoruz.
         $db->where('email', $_SESSION['dashboardUser']);
         // Kullanıcıyı güncelliyoruz.

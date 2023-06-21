@@ -11,6 +11,7 @@ $kategori_seo_url = $page_url[$page_categories_url];
 $page_url = end($page_url);
 $page_url = t_decode($page_url);
 $db->where('seo_url', $page_url);
+$db->where('durum',1);
 $results = $db->get('education_list');
 foreach ($results as $value) {
 	$id = $value['id'];
@@ -126,24 +127,32 @@ foreach ($resultsCategories as $valueCategories) {
 									<ul>
 										<li style="background:#2d2d2d; color:#fff">
 											<span style="color:#fff">
-												<i class="fas fa-share-alt"></i> 
+												<i class="fas fa-share-alt"></i>
 												Paylaş
 											</span>
 											<ul style="background:#2d2d2d">
 												<li style="background:#2d2d2d;">
-												<a style="color:#fff" href="https://www.facebook.com/sharer/sharer.php?u=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&quote="
+													<a style="color:#fff"
+														href="https://www.facebook.com/sharer/sharer.php?u=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&quote="
 														title="Share on Facebook" target="_blank"
 														onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&quote=' + encodeURIComponent(document.URL)); return false;"><i
-														style="filter:none" class="fab fa-facebook-f"></i> Facebook</a></li>
-												<li style="background:#2d2d2d; color:#fff"><a style="color:#fff" href="https://twitter.com/intent/tweet?source=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&text=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>"
+															style="filter:none" class="fab fa-facebook-f"></i>
+														Facebook</a>
+												</li>
+												<li style="background:#2d2d2d; color:#fff"><a style="color:#fff"
+														href="https://twitter.com/intent/tweet?source=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&text=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>"
 														target="_blank" title="Tweet"
 														onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + ':%20'  + encodeURIComponent(document.URL)); return false;"><i
-														style="filter:none" class="fab fa-twitter"></i> Twitter</a></li>
+															style="filter:none" class="fab fa-twitter"></i> Twitter</a>
+												</li>
 												<li style="background:#2d2d2d; color:#fff">
-												<a style="color:#fff" href="http://www.linkedin.com/shareArticle?mini=true&url=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&title=<?php echo $baslik; ?>&summary=&source=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>"
+													<a style="color:#fff"
+														href="http://www.linkedin.com/shareArticle?mini=true&url=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>&title=<?php echo $baslik; ?>&summary=&source=https://www.okul.pwc.com.tr/<?php echo $_SERVER["REQUEST_URI"]; ?>"
 														target="_blank" title="Share on LinkedIn"
 														onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.title)); return false;">
-														<i style="filter:none" class="fab fa-linkedin-in"></i> LinkedIn</a></li>
+														<i style="filter:none" class="fab fa-linkedin-in"></i>
+														LinkedIn</a>
+												</li>
 											</ul>
 										</li>
 									</ul>
@@ -165,154 +174,141 @@ foreach ($resultsCategories as $valueCategories) {
 
 							<?php
 
-							$dateToday = date("Y-m-d");
-							$db->where('edu_id', $id);
-							$db->where('durum', 1);
-							$db->where('egitim_tarih', $dateToday, '>=');
-							$totalEgitim = $db->getValue("education_calender", "count(id)");
-
-							$sql = "SELECT * FROM education_calender_list WHERE edu_id = $id AND NOT (types <=> 'E-Learning')";
+							// $dateToday = date("Y-m-d");
+							// $db->where('edu_id', $id);
+							// $db->where('durum', 1);
+							// $db->where('egitim_tarih', $dateToday, '>=');
+							// $totalEgitim = $db->getValue("education_calender", "count(id)");
+							
+							//egitim'in aktif bir takvimi varmı ?  (elearning yada calender)
+							$sql = "SELECT * FROM open_education_list WHERE edu_id = $id ";
 							$result = $db->query($sql);
-							$calenderEdu= count($result);
 
-							if ($totalEgitim > 0 && $calenderEdu > 0) { // takvim eğitimi
+							$isActive = count($result);
+
+							if ($isActive > 0) {
 								?>
-								<div class="egitimTableTitle">
-									<h5><b>Aktif Eğitim Tarihleri</b></h5>
-								</div>
-								<table class="tableacikegitim">
-									<thead>
-										<th>Tarih</th>
-										<th>Şehir</th>
-										<th>Fiyat</th>
-										<th></th>
-									</thead>
-									<?php
-									$i = 0;
-									$db->where('edu_id', $id);
-									$db->where('durum', 1);
-									$db->where('egitim_tarih', $dateToday, '>=');
-									$db->orderBy("egitim_tarih", "asc");
-									$resultsCalender = $db->get('education_calender_list');
-									foreach ($resultsCalender as $valueCalender) {
+
+								<?php
+								$i = 0;
+								// $db->where('edu_id', $id);
+								// $db->where('durum', 1);
+								// $db->where('egitim_tarih', $dateToday, '>=');
+								// $db->orderBy("egitim_tarih", "asc");
+								$resultsCalender = $result;
+								foreach ($resultsCalender as $valueCalender) {
+									if ($valueCalender['types'] <> 'E-Learning') {
 										$i++;
 										$webex = $valueCalender['webex'];
 										?>
-										<tr onclick="window.location.href = '<?php echo $valueCalender['seo_url']; ?>';">
-											<td>
-												<?php echo date2Human($valueCalender['egitim_tarih']); ?>
-											</td>
-											<td>
-												<?php if ($webex == 1)
-													echo "Webex";
-												else
-													echo $valueCalender['sehir_adi']; ?>
-											</td>
-											<td>
-												<?php if ($webex == 1)
-													echo "Ücretsiz";
-												else
-													echo number_format($valueCalender['ucret'], 2, ',', '.') . " TL"; ?>
-											</td>
-											<?php if ($webex == 1) { ?>
+										<div class="egitimTableTitle">
+											<h5><b>Aktif Eğitim Tarihleri</b></h5>
+										</div>
+										<table class="tableacikegitim">
+											<thead>
+												<th>Tarih</th>
+												<th>Şehir</th>
+												<th>Fiyat</th>
+												<th></th>
+											</thead>
+											<tr onclick="window.location.href = '<?php echo $valueCalender['seo_url']; ?>';">
 												<td>
-													<div class="satinal buton butontable renk1 button13"><a target="_blank"
-															href="<?php echo $valueCalender['webex_url']; ?>"><i
-																class="user-icon"></i><span>Kayıt Ol</span></a></div>
+													<?php echo date2Human($valueCalender['egitim_tarih']); ?>
 												</td>
-											<?php } else { ?>
 												<td>
-													<div class="satinal buton butontable renk1 button13"><a
-															href="uyelik/<?php echo $valueCalender['seo_url']; ?>"><i
-																class="user-icon"></i><span>Kayıt Ol</span></a></div>
+													<?php if ($webex == 1)
+														echo "Webex";
+													else
+														echo $valueCalender['sehir_adi']; ?>
 												</td>
-											<?php } ?>
-										</tr>
+												<td>
+													<?php if ($webex == 1)
+														echo "Ücretsiz";
+													else
+														echo number_format($valueCalender['ucret'], 2, ',', '.') . " TL"; ?>
+												</td>
+												<?php if ($webex == 1) { ?>
+													<td>
+														<div class="satinal buton butontable renk1 button13"><a target="_blank"
+																href="<?php echo $valueCalender['webex_url']; ?>"><i
+																	class="user-icon"></i><span>Kayıt Ol</span></a></div>
+													</td>
+												<?php } else { ?>
+													<td>
+														<div class="satinal buton butontable renk1 button13"><a
+																href="uyelik/<?php echo $valueCalender['seo_url']; ?>"><i
+																	class="user-icon"></i><span>Kayıt Ol</span></a></div>
+													</td>
+												<?php } ?>
+											</tr>
 
-									<?php } ?>
+										<?php } else { //elearning egitimi ise ?>
+											
+
+
+											<div class="egitimTableTitle">
+												<h5><b>Aktif Eğitim Tarihleri</b></h5>
+											</div>
+											<table class="tableacikegitim">
+												<thead>
+													<!-- <th>Tarih</th> -->
+													<th>Yer</th>
+													<th>Fiyat</th>
+													<th></th>
+												</thead>
+											<?php
+										
+												$webex = $valueCalender['webex'];
+												?>
+													<tr onclick="window.location.href = '<?php echo $valueCalender['seo_url']; ?>';">
+														<!-- <td>
+													</td> -->
+														<td>
+													<?php if ($webex == 1)
+														echo "Webex";
+													else
+														echo "E-Learning"; ?>
+														</td>
+														<td>
+													<?php if ($webex == 1)
+														echo "Ücretsiz";
+													else
+														echo number_format($valueCalender['ucret'], 2, ',', '.') . " TL"; ?>
+														</td>
+												<?php if ($webex == 1) { ?>
+															<td>
+																<div class="satinal buton butontable renk1 button13"><a target="_blank"
+																		href="<?php echo $valueCalender['webex_url']; ?>"><i
+																			class="user-icon"></i><span>Kayıt Ol</span></a></div>
+															</td>
+												<?php } else { ?>
+															<td>
+																<div class="satinal buton butontable renk1 button13"><a
+																		href="uyelik/<?php echo $valueCalender['seo_url']; ?>"><i
+																			class="user-icon"></i><span>Kayıt Ol</span></a></div>
+															</td>
+												<?php } ?>
+													</tr>
+
+											</table>
+
+								<?php } ?>
+											
+
+								<?php //son
+	
+								} ?>
 								</table>
 
-							<?php } else if (!($totalEgitim > 0) && ($calenderEdu > 0)) // tarihi geçmiş takvim eğitimi
+							<?php } else // tarihi geçmiş takvim eğitimi
 							{ ?>
 									<div class="bilgiler">
 										<time>Bu eğitim için açık bir tarih bulunmamaktadır. <br />* Bilgi al formunu doldurarak
 											ilgili eğitim takvimi planlandığında sizinle iletişime geçmemizi
 											sağlayabilirsiniz.</time>
 									</div>
-							<?php } else if (!($totalEgitim > 0) && !($calenderEdu > 0)) { // elearning eğitimi
-									$db->where('edu_id', $id);
-									$db->where('durum', 1);
-									$resultsCalender = $db->get('education_calender_list');
-									$resultsCalenderCount = count($resultsCalender);
-									// elearning eğitimi için takvim açılmış mı?
-									if($resultsCalenderCount>0){
-
-								?>
-								
-								 
-										<div class="egitimTableTitle">
-											<h5><b>Aktif Eğitim Tarihleri</b></h5>
-										</div>
-										<table class="tableacikegitim">
-											<thead>
-												<!-- <th>Tarih</th> -->
-												<th>Yer</th>
-												<th>Fiyat</th>
-												<th></th>
-											</thead>
-										<?php
-										$i = 0;
-										$db->where('edu_id', $id);
-										$db->where('durum', 1);
-										$resultsCalender = $db->get('education_calender_list');
-										foreach ($resultsCalender as $valueCalender) {
-											$i++;
-											$webex = $valueCalender['webex'];
-											?>
-												<tr onclick="window.location.href = '<?php echo $valueCalender['seo_url']; ?>';">
-													<!-- <td>
-												//<?php echo date2Human($valueCalender['egitim_tarih']); ?>
-													</td> -->
-													<td>
-												<?php if ($webex == 1)
-													echo "Webex";
-												else
-													echo "E-Learning"; ?>
-													</td>
-													<td>
-												<?php if ($webex == 1)
-													echo "Ücretsiz";
-												else
-													echo number_format($valueCalender['ucret'], 2, ',', '.') . " TL"; ?>
-													</td>
-											<?php if ($webex == 1) { ?>
-														<td>
-															<div class="satinal buton butontable renk1 button13"><a target="_blank"
-																	href="<?php echo $valueCalender['webex_url']; ?>"><i
-																		class="user-icon"></i><span>Kayıt Ol</span></a></div>
-														</td>
-											<?php } else { ?>
-														<td>
-															<div class="satinal buton butontable renk1 button13"><a
-																	href="uyelik/<?php echo $valueCalender['seo_url']; ?>"><i
-																		class="user-icon"></i><span>Kayıt Ol</span></a></div>
-														</td>
-											<?php } ?>
-												</tr>
-
 									<?php } ?>
-										</table>
-
-							<?php } else{ // elearning  takvimi açılmışsa  ?>
-								
-								<div class="bilgiler">
-										<time>Bu eğitim için açık bir tarih bulunmamaktadır. <br />* Bilgi al formunu doldurarak
-											ilgili eğitim takvimi planlandığında sizinle iletişime geçmemizi
-											sağlayabilirsiniz.</time>
-									</div>
-						<?php	}
-
-						} ?>
+							
 						</section>
 
 

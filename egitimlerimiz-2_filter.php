@@ -30,8 +30,9 @@ if(isset($searchTerm) && !isset($gelenVeri) && !isset($gelenLocation)){
  
  if (!$allPage) {
    $countQuery = $query;
-$results = $db->rawQuery($countQuery);
-$totalDataCount = count($results);
+   $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
+   $results = $db->rawQuery($countQuery);
+   $totalDataCount=$results[0]['total'];
 //1 sayfadaki data sayısı
 $perPage = 8;
 //toplam sayfa sayısı
@@ -42,11 +43,7 @@ $totalPageCount = ceil($totalDataCount / $perPage);
       $limit = 8;
    $limit = 8 + (($page - 1) * 8);
    
-   $query .= "ORDER BY 
-   CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-   `kayit_tarihi` DESC,
-   CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-   `kayit_tarihi` DESC LIMIT $limit ";
+   $query .= " LIMIT $limit ";
 }
    // echo $query; //sORGUYU GOSTER
 $results = $db->rawQuery($query);
@@ -131,11 +128,11 @@ if(count($gelenLocation)>0){
   }
   $query .= ")";
   }
-  $query .= "ORDER BY 
-  CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-  `kayit_tarihi` DESC,
-  CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-  `kayit_tarihi` DESC ";
+//   $query .= "ORDER BY 
+//   CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
+//   `kayit_tarihi` DESC,
+//   CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
+//   `kayit_tarihi` DESC ";
 
    // $query.="ORDER BY CASE WHEN
    // `egitim_tarih` IS NULL THEN 1 ELSE 0
@@ -144,8 +141,9 @@ if(count($gelenLocation)>0){
     //pagination işlemi
    if (!$allPage) {
       $countQuery = $query;
+      $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
       $results = $db->rawQuery($countQuery);
-      $totalDataCount = count($results);
+      $totalDataCount=$results[0]['total'];
       //1 sayfadaki data sayısı
       $perPage = 8;
       //toplam sayfa sayısı
@@ -166,8 +164,9 @@ else if(!isset($searchTerm) && !isset($gelenCategory) && !isset($gelenVeri) && !
 	 //pagination işlemi
     if (!$allPage) {
       $countQuery = $query;
-   $results = $db->rawQuery($countQuery);
-   $totalDataCount = count($results);
+      $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
+      $results = $db->rawQuery($countQuery);
+      $totalDataCount=$results[0]['total'];
    //1 sayfadaki data sayısı
    $perPage = 8;
    //toplam sayfa sayısı
@@ -178,11 +177,7 @@ else if(!isset($searchTerm) && !isset($gelenCategory) && !isset($gelenVeri) && !
       if ($page == 1)
          $limit = 8;
       $limit = 8 + (($page - 1) * 8);
-      $query .= "ORDER BY 
-      CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-      `kayit_tarihi` DESC,
-      CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-      `kayit_tarihi` DESC LIMIT $limit";
+      $query .= " LIMIT $limit";
    }
 	  $results = $db->rawQuery($query);
 }

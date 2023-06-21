@@ -12,16 +12,17 @@ $rakamsiz = array(); //egitim tipi
 $rakamli = array(); // egitim level
 $searchTerm = $_POST['searchTerm']; //arama butonu 
 
-$query = "SELECT * FROM egitimlerimiz_filter ";
+$query = "SELECT * FROM index_filter ";
 
 //arama butonu gönderilmişse
 if (isset($searchTerm) && !isset($gelenVeri) && !isset($gelenCategory) && !isset($gelenLocation)) {
-   $query = "SELECT * FROM egitimlerimiz_filter where egitim_adi LIKE '%$searchTerm%' ";
+   $query = "SELECT * FROM index_filter where egitim_adi LIKE '%$searchTerm%' ";
    //pagination işlemi
    if (!$allPage) {
       $countQuery = $query;
+      $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
       $results = $db->rawQuery($countQuery);
-      $totalDataCount = count($results);
+      $totalDataCount=$results[0]['total'];
       //1 sayfadaki data sayısı
       $perPage = 4;
       //toplam sayfa sayısı
@@ -32,18 +33,13 @@ if (isset($searchTerm) && !isset($gelenVeri) && !isset($gelenCategory) && !isset
          $limit = 4;
       $limit = 4 + (($page - 1) * 4);
 
-      // $query .= "ORDER BY 
-      // CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-      // `kayit_tarihi` DESC,
-      // CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-      // `kayit_tarihi` DESC LIMIT $limit";
-      $query .= "ORDER BY 
-      kayit_tarihi DESC LIMIT $limit";
+  
+      
+      $query .= " LIMIT $limit";
    }
    // echo $query; //sORGUYU GOSTER
    $results = $db->rawQuery($query);
 }
-//kategori,type,level,lokasyon gönderilmişse
 else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
    foreach ($veri as $eleman) {
       $rakam_sonuc = preg_match('/\d+/', $eleman);
@@ -75,7 +71,7 @@ else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
          if ($i > 1) {
             $query .= "OR types = '$type' ";
          } else {
-            if (substr($query, -strlen("egitimlerimiz_filter ")) === "egitimlerimiz_filter ") {
+            if (substr($query, -strlen("index_filter ")) === "index_filter ") {
                $query .= "WHERE (types = '$type' ";
             } else {
                $query .= "AND (types = '$type' ";
@@ -93,7 +89,7 @@ else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
          if ($i > 1) {
             $query .= "OR level_id = $level ";
          } else {
-            if (substr($query, -strlen("egitimlerimiz_filter ")) === "egitimlerimiz_filter ") {
+            if (substr($query, -strlen("index_filter ")) === "index_filter ") {
                $query .= "WHERE (level_id = $level ";
             } else {
                $query .= "AND (level_id = $level ";
@@ -110,7 +106,7 @@ else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
          if ($i > 1) {
             $query .= "OR sehir_adi = '$lokasyon' ";
          } else {
-            if (substr($query, -strlen("egitimlerimiz_filter ")) === "egitimlerimiz_filter ") {
+            if (substr($query, -strlen("index_filter ")) === "index_filter ") {
                $query .= "WHERE (sehir_adi = '$lokasyon' ";
             } else {
                $query .= "AND (sehir_adi = '$lokasyon' ";
@@ -120,27 +116,13 @@ else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
       }
       $query .= ")";
    }
-   //pagination işlemi
-   //EGİTİM TARİHİNE GÖRE SIRALAR
-   // $query .= "ORDER BY CASE WHEN
-   // `egitim_tarih` IS NULL THEN 1 ELSE 0
-   // END,
-   // `egitim_tarih`";
-   //KAYIT TARİHİNE GÖRE SIRALAR
-   //aktif tarihi ve elearningler
-   $query .= "AND (egitim_tarih > CURDATE() OR (YEAR(egitim_tarih) = YEAR(CURDATE()) AND MONTH(egitim_tarih) > MONTH(CURDATE())) OR YEAR(egitim_tarih) > YEAR(CURDATE()) OR (types = 'E-Learning' AND source = 'education-calender')) ";
-   // $query .= "ORDER BY 
-   // CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-   // `kayit_tarihi` DESC,
-   // CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-   // `kayit_tarihi` DESC ";
-   $query .= " ORDER BY 
-   kayit_tarihi DESC ";
+  
    //pagination işlemi
    if (!$allPage) {
       $countQuery = $query;
+      $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
       $results = $db->rawQuery($countQuery);
-      $totalDataCount = count($results);
+      $totalDataCount=$results[0]['total'];
       //1 sayfadaki data sayısı
       $perPage = 4;
       //toplam sayfa sayısı
@@ -151,7 +133,7 @@ else if (isset($gelenCategory) || isset($gelenVeri) || isset($gelenLocation)) {
          $limit = 4;
       $limit = 4 + (($page - 1) * 4);
 
-      $query .= "LIMIT $limit";
+      $query .= " LIMIT $limit";
    }
    // echo $query; //sORGUYU GOSTER
    $results = $db->rawQuery($query);
@@ -162,59 +144,30 @@ else if (!isset($searchTerm) && !isset($gelenCategory) && !isset($gelenVeri) && 
 
    //pagination işlemi
    if (!$allPage) {
-      $query .= "WHERE (egitim_tarih > CURDATE() OR (YEAR(egitim_tarih) = YEAR(CURDATE()) AND MONTH(egitim_tarih) > MONTH(CURDATE())) OR YEAR(egitim_tarih) > YEAR(CURDATE()) OR (types = 'E-Learning' AND source = 'education-calender') ) ";
       $countQuery = $query;
+      $countQuery = str_replace('*', 'COUNT(*) as total', $countQuery);
       $results = $db->rawQuery($countQuery);
-      $totalDataCount = count($results);
+      $totalDataCount=$results[0]['total'];
+   //   $totalDataCount = count($results);
       //1 sayfadaki data sayısı
       $perPage = 4;
       //toplam sayfa sayısı
       $totalPageCount = ceil($totalDataCount / $perPage);
       // echo $totalPageCount;
-      //son sayfaya gelindimi'
 
       if ($page == 1)
          $limit = 4;
       $limit = 4 + (($page - 1) * 4);
 
-      //aktif tarihi ve elearningler
-      // $query .= "ORDER BY 
-      // CASE WHEN `source`='education' THEN 1 ELSE 0 END, 
-      // `kayit_tarihi` DESC,
-      // CASE WHEN `source` = 'education-calender' THEN 0 ELSE 1 END,
-      // `kayit_tarihi` DESC LIMIT $limit";
-      $query .= "ORDER BY 
-     kayit_tarihi DESC LIMIT $limit";
+
+      $query .= " LIMIT $limit";
    }
 
 
    // echo $query; //sORGUYU GOSTER
    $results = $db->rawQuery($query);
 }
-//tümünü görüntüle basıldıysa
-if (isset($allPage)) {
-   echo '
-   <script> 
-   $(".tumunu_goruntule").hide();
-   $(".dfazla_goruntule").hide();
-   </script>';
-} else { //basılmadıysa
-   // tumunu görüntüle hide olsun ve 
-   //dfazla gorüntüle durumu
-   if ($page >= $totalPageCount) {
-      echo '
-         <script> 
-         $(".dfazla_goruntule").hide();
-         $(".tumunu_goruntule").hide();
-         </script>';
-   } else {
-      echo '<script> 
-      $(".dfazla_goruntule").show();
-      $(".tumunu_goruntule").show();
-      </script>';
-   }
 
-}
 // Sonuçları işleme
 if ($db->count > 0) {
    $i = 1;
@@ -332,6 +285,25 @@ if ($db->count > 0) {
    // Sonuç yoksa yapılacak işlemler
    echo "Sonuç bulunamadı.";
 }
+//tümünü görüntüle basıldıysa (javascript)
+if (isset($allPage)) {
+} else { //basılmadıysa
+   // tumunu görüntüle hide olsun ve 
+   //dfazla gorüntüle durumu
+   if ($page >= $totalPageCount) {
+      echo '
+         <script> 
+         $(".dfazla_goruntule").hide();
+         $(".tumunu_goruntule").hide();
+         </script>';
+   } else {
+      echo '
+      <script> 
+      $(".dfazla_goruntule").show();
+      $(".tumunu_goruntule").show();
+      </script>';
+   }
 
+}
 
 ?>

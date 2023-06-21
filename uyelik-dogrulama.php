@@ -37,6 +37,7 @@ if (
         header("Location: https://www.okul.pwc.com.tr/");
         exit();
     }
+
     //kullanıcıya hiç code gönderilmemişse ve bu sayfada ise code gönder
     if ($_SESSION['dashboardUserStatus'] != 1 && $activation_code == '') {
         $onayKodu = crc16($email . bin2hex(openssl_random_pseudo_bytes(5)) . time());
@@ -57,7 +58,7 @@ if (
             $results = $db->get('web_user');
 
             $telefon = preg_replace("/[^0-9]/", "", $user_phone);
-            //
+
             $xml_data = "<MainmsgBody>
                     <Command>0</Command>
                     <PlatformID>1</PlatformID>
@@ -79,6 +80,63 @@ if (
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $response = curl_exec($ch);
             //dönen değer ID
+
+            //mail adresi dogrulanmışsa mail'e code gönder 
+            if ($_SESSION['dashboardUserMailStatus'] == 1) {
+                require_once("dosyalar/dahili/libs/class.phpmailer.php");
+                require("dosyalar/dahili/libs/class.smtp.php");
+                require("dosyalar/dahili/libs/class.pop3.php");
+                $getdata = http_build_query(
+                    array(
+                        'adsoyad' => $user_name,
+                        'code' => $onayKodu
+                    )
+                );
+
+                $opts = array(
+                    'http' =>
+                    array(
+                        'method' => 'POST',
+                        'content' => $getdata
+                    )
+                );
+                //mail gönderimi
+                $context = stream_context_create($opts);
+
+                $body = file_get_contents('http://www.okul.pwc.com.tr/dosyalar/dahili/template/uyelik_dogrulama.php?', false, $context);
+              
+                $mail = new PHPMailer;
+                $mail->IsSMTP();
+
+                //bireysel
+                $mail->Host = "smtp.gmail.com";
+                $mail->Username = 'rkapucuoglu@socialthinks.com';
+                $mail->Password = 'Recep8990.';
+                $mail->SMTPAuth = true;
+                $mail->Port = 587;
+
+                // prod
+                // $mail->Host = "10.9.18.5";
+                // $mail->Username = 'egitim@pwc.com.tr';
+                // $mail->Password = '';
+                // $mail->SMTPAuth = false;
+                // $mail->SMTPAutoTLS = false;
+                // $mail->Port = 25;
+
+                $mail->CharSet = 'utf-8';
+                $mail->setFrom('egitim@pwc.com.tr', 'Business School');
+                $mail->AddAddress($user_mail);
+                // Name is optional
+                $mail->addReplyTo('egitim@pwc.com.tr', 'Business School');
+                $mail->setLanguage('tr', '/language');
+        
+                // Set email format to HTML
+                $mail->Subject = 'Business School - Hesabınızı Doğrulayın';
+                $mail->msgHTML($body);
+                $mail->send();
+             
+            }
+
             if (strpos($response, "ID") !== false) {
                 $_SESSION['dashboardUser'] = $user_mail;
                 $db->where('email', $_SESSION['dashboardUser']);
@@ -88,7 +146,7 @@ if (
                     $_SESSION['dashboardUserId'] = $value['id'];
                     $_SESSION['dashboardUserPhone'] = $value['phone'];
                 }
-                $dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now());
+                $dataLogon = array('expression_time' => $db->now());
                 $db->where('email', $_SESSION['dashboardUser']);
                 $idLogon = $db->update('web_user', $dataLogon);
             }
@@ -96,6 +154,7 @@ if (
             curl_close($ch);
         }
     }
+
     ?>
 
     <section id="sayfaust" style="background-image:url(dosyalar/images/sayfaust-bg.jpg);">
@@ -128,12 +187,11 @@ if (
                                             <b>SMS Doğrulama</b>
                                         </div>
                                         <p>Lütfen, <b>
-
                                                 <?php
                                                 $telefon = preg_replace("/[^0-9]/", "", $user_phone);
                                                 $filterPhone = substr($telefon, -4);
                                                 echo "*******" . $filterPhone;
-
+    
                                                 ; ?>
                                             </b> numaralı telefona yollanan şifreyi giriniz.<br />
                                             <small>İşlemleri iptal etmek istiyorsanız, <a href="hatali-mail.php"
@@ -162,8 +220,9 @@ if (
                                         <hr>
                                         <?php $db->where('email', $_SESSION['dashboardUser']);
                                         $result = $db->getOne('web_user');
-                                        if ($result['sms_update_remaining'] == 1) {
-
+                                        //kullanıcı last_login_date değeri ,(kodun güncellendiği tarihten) küçükse 
+                                        //telefon güncelleme hakkı ver.
+                                        if ($result['last_login_date'] <= '2023-06-06 11:51:38') {
                                             ?>
                                             <small>Sevgili
                                                 <?php echo $_SESSION['dashboardUserName'] ?>,kayıtlı telefon numaranızı
@@ -173,7 +232,6 @@ if (
 
                                             </small>
                                         <?php } else {
-
                                             ?>
                                             <small>Üyelik girişi ile ilgili problem yaşıyorsanız<a
                                                     href="mailto:egitim@tr.pwc.com?Subject=Telefon numaramı güncellemek istiyorum "><strong>
@@ -297,7 +355,7 @@ else if ($_SESSION['dashboardUser'] == "uyeol_step1") {
                     $_SESSION['dashboardUserId'] = $value['id'];
                     $_SESSION['dashboardUserPhone'] = $value['phone'];
                 }
-                $dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now());
+                $dataLogon = array('expression_time' => $db->now());
                 $db->where('phone', $_SESSION['dashboardUserPhone']);
                 $idLogon = $db->update('web_user', $dataLogon);
             }
@@ -486,12 +544,16 @@ else if ($_SESSION['dashboardUser'] == "uyeol_step1") {
 
                                     <div class="label-div2 temizle" style="display: flex; flex-direction: column;">
                                         <span class="checkbox-div">
-                                            <input class="magic-checkbox" type="checkbox" id="pwc_calisaniyim" name="pwc_calisaniyim" required />
+                                            <input class="magic-checkbox" type="checkbox" id="pwc_calisaniyim"
+                                                name="pwc_calisaniyim" required />
                                             <label for="pwc_calisaniyim" style="font-size:13px; float:left">
-                                            <a 
-                                             style="text-decoration:underline !important">Eski PwC Çalışanıyım</a> 
+                                                <a style="text-decoration:underline !important">Eski PwC Çalışanıyım</a>
                                             </label>
                                         </span>
+                                        <div>
+                                            <hr>
+
+                                        </div>
                                         <span class="checkbox-div">
                                             <input class="magic-checkbox" type="checkbox" id="sozlesme" name="sozlesme" required />
                                             <label for="sozlesme" style="font-size:13px; float:left"><a href="uyelik-sozlesmesi"
@@ -509,6 +571,7 @@ else if ($_SESSION['dashboardUser'] == "uyeol_step1") {
                                                 onaylıyorum.</label>
                                         </span>
                                     </div>
+
                                     <div class="bilgial buton renk2 button13"><a href="javascript:;"
                                             onclick="return sign_send_step2();"><span>Üyeliğimi Oluştur</span></a></div>
                                     <p style='font-size:11px; float:left; text-align:left'>Kişisel verileriniz, <a

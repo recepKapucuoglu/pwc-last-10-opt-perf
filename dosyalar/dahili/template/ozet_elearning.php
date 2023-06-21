@@ -343,9 +343,9 @@
 														<!-- Button Table // -->
 														<table class="tg">
 															<tr>
-																<!-- <th class="tg-cqfb"><span
+																<th class="tg-cqfb"><span
 																		style="font-weight:bold">Eğitim Özeti</span>
-																</th> -->
+																</th>
 																<th class="tg-6ec3"><span
 																		style="font-weight:bold">Eğitim Adı</span></th>
 																<th class="tg-6ec3"><span
@@ -355,24 +355,8 @@
 																		style="font-weight:bold">Ücret</span></th>
 															</tr>
 															<tr>
-																<?php
-
-																//google url dogrulamasına takılmasın
-																// Resmi indir
-																$img_data = file_get_contents($_POST['egitim_image']);
-
-																// Base64 olarak kodla
-																$img_base64 = base64_encode($img_data);
-
-																// E-posta içeriğine resmi ekle
-																$html_content = '<img src="data:image/jpeg;base64,' . $img_base64 . '" alt="Eğitim Resmi">';
-
-																?>
-																<!-- <td class="tg-cly1" style="text-align:center"><img
-																		src="<?php echo $_POST['egitim_image']; ?>"
-																		alt="Image" width="150" height="76"></td> -->
-																<!-- <img src="data:image/jpeg;base64,<?php echo $img_base64 ?>"
-																	alt="Eğitim Resmi" width="150" height="76"> -->
+																
+															<td class="tg-cly1" style="text-align:center"><img src="<?php echo $_POST['egitim_image']; ?>" alt="Image" width="150" height="76"></td>
 																<td class="tg-nrix" style="text-align:center">
 																	<span style="font-weight:400;font-style:normal">
 																		<?php echo $_POST['egitim_adi']; ?>

@@ -72,7 +72,7 @@ if ($_POST['adsoyad']) {
                             $_SESSION['dashboardUserPhone'] = $value['phone'];
                         }
                         $_SESSION['dashboardUser'] = "uyeol_step1"; 
-                        $dataLogon = array('last_login_date' => $db->now(), 'expression_time' => $db->now() ,'last_page_url' => $last_page_url);
+                        $dataLogon = array('expression_time' => $db->now() ,'last_page_url' => $last_page_url);
                         $db->where('phone', $_SESSION['dashboardUserPhone']);
                         $idLogon = $db->update('web_user', $dataLogon );
                         $random = (time());

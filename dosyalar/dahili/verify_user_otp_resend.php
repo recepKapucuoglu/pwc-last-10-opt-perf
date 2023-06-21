@@ -62,7 +62,7 @@ if ($_SESSION['dashboardUser'] && $_SESSION['dashboardUser']!="uyeol_step1" && $
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $response = curl_exec($ch);
         //dönen değer ID
-
+        
         if (strpos($response, "ID") !== false) {
             setcookie("verifySent", true, time() + (60 * 3), "/");
             $data = array("expression_time" => $db->now(), "activation_code" => $uuid);

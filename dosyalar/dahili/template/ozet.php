@@ -345,19 +345,7 @@
 																		style="font-weight:bold">Ücret</span></th>
 															</tr>
 															<tr>
-																<?php
-
-																//google url dogrulamasına takılmasın	
-																// Resmi indir
-																$img_data = file_get_contents($_POST['egitim_image']);
-
-																// Base64 olarak kodla
-																$img_base64 = base64_encode($img_data);
-
-																// E-posta içeriğine resmi ekle
-																// $html_content = '<img src="data:image/jpeg;base64,' . $img_base64 . '" alt="Eğitim Resmi">';
-
-																?>
+																
 																<td class="tg-cly1" style="text-align:center"><img
 																		src="<?php echo $_POST['egitim_image']; ?>"
 																		alt="Image" width="150" height="76"></td>

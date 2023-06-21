@@ -8,7 +8,7 @@ if ($_SESSION['dashboardUser']) {
     $total = $db->getValue('web_user', "count(id)");
     if ($total < 1 ) { //girilen telefon numarası  eskisiyle aynı değilse
         //telefon numarasını güncelleyelim
-        $data = array('phone' => $telefon, 'last_login_date' => $db->now(),'status'=>0,'sms_update_remaining'=>0);
+        $data = array('phone' => $telefon,'status'=>0,'sms_update_remaining'=>0);
         $db->where('email', $_SESSION['dashboardUser']);
         $update = $db->update('web_user', $data);
         if ($update) {

@@ -12,23 +12,15 @@ if ($_SESSION['dashboardUser']){?>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<?php
-								$silinen_email = $_SESSION['dashboardUser']."_pwc";
+								$silinen_email = $_SESSION['dashboardUser']."_deleted";
 								$data = Array (
 									'email' 			=> $silinen_email,
-									'status' 	=> 0
+									'status' 			=> 0,
 								);
 							
 								$db->where('email', $_SESSION['dashboardUser']);
 								$id = $db->update ('web_user', $data);
-								if ($id) {
-								 
-									echo "<div class=\"alert alert-danger\">Hesabınız silinmiştir. Hesabınızdan çıkış yapılıyor.</div><script language=\"JavaScript\">
-									  function Git() {
-										 location.href=\"logout.php\";
-									  }
-									  setTimeout(\"Git()\",4000);
-								  </script>";
-								}
+								
 								?>
 							</div>
 						</div>
@@ -38,7 +30,20 @@ if ($_SESSION['dashboardUser']){?>
 			</div>
 		</div>
 	</section>
-<?php } else {
+<?php 
+
+} 
+if ($id) {
+				
+	$db->where('email',$_SESSION['dashboardUser']."_deleted");
+	$db->delete('web_user');
+		session_destroy();
+        header("Location: https://www.okul.pwc.com.tr/uyelik");
+        exit();
+}
+
+
+else {
 
 echo "<script language=\"JavaScript\">location.href=\"/login.php\";</script>";
 

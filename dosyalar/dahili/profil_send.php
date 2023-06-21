@@ -87,10 +87,12 @@ if ($_POST['id']) {
 	$mail_aktifMi = $sonuc['mail_status'];
 
 	// mail aktif değilse işlem yaptırma
-	if ($mail_aktifMi <> 1) {
-		echo '<div class="alert alert-danger"><strong>Uyarı!</strong> Bilgilerinizi güncelleyebilmek için lütfen mail adresinizi doğrulayınız.</div>';
-		die();
-	}
+	
+	// if ($mail_aktifMi <> 1) {
+	// 	echo '<div class="alert alert-danger"><strong>Uyarı!</strong> Bilgilerinizi güncelleyebilmek için lütfen mail adresinizi doğrulayınız.</div>';
+	// 	die();
+	// }
+	
 	// mail değişmişse,
 	if ($mail_changed == 0) {
 		$db->where("email", $email);

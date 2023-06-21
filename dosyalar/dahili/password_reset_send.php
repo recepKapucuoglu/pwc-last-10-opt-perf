@@ -15,6 +15,7 @@ if ($_POST['email']) {
 			echo '<div class="alert alert-danger">Girmiş olduğunuz bilgiler ile sistemde kayıtlı kullanıcı bulunmamaktadır.  </div>';
 			die();
 		} else {
+				
 			// Onay Kodu Oluşturuyoruz.
 			$onayKodu = getUuid();
 			$data = array('reset_code' => $onayKodu);

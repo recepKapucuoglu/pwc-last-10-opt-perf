@@ -6408,6 +6408,14 @@ p,
         font-size: 1rem;
     }
 
+    .child-altmenu_p {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 0px !important;
+    }
+
     .sub-altmenu li span {
         font-size: 1rem;
     }

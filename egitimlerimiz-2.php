@@ -46,10 +46,10 @@ foreach ($results as $value) {
 </section>
 
 <section class="ortakisim">
-<div class="container">
-	<?php echo $aciklama; ?>
-</div>
-<div class="education-type">
+	<div class="container">
+		<?php echo $aciklama; ?>
+	</div>
+	<div class="education-type">
 		<div class="container education-type__container">
 			<div class="education-type_container">
 				<div>
@@ -58,9 +58,8 @@ foreach ($results as $value) {
 							<? if (isset($_POST['selectedTypes'])) {
 								$selectedTypes = $_POST['selectedTypes'];
 								echo $selectedTypes;
-								// $selectedTypes, seçilen türlerin bir dizi halinde değerlerini içerir
-							
-								// Veritabanı sorgusunda seçilen türleri filtrelemek için buraya kod yazabilirsiniz
+
+
 							} ?>
 							Eğitim Tipi
 						</span>
@@ -106,7 +105,7 @@ foreach ($results as $value) {
 		<input type="hidden" class="seo-url-path" id="page_url" name="sınıfEgitimi" value="<?php echo $page_url; ?>">
 		<div class="container">
 			<div class="education-type_container" id="educationTypeContainer" style="display:none">
-			<?php
+				<?php
 				$query = "SELECT DISTINCT type_ismi FROM education_list WHERE type_ismi IS NOT NULL AND kategoriler LIKE '%$kategori_adi%'";
 				$type_list = $db->rawQuery($query);
 				foreach ($type_list as $type) {
@@ -117,28 +116,29 @@ foreach ($results as $value) {
 						<label for="<?php echo $type['type_ismi'] ?>"><?php echo $type['type_ismi'] ?></label><br>
 					</div>
 				<?php } ?>
-				
+
 			</div>
 			<div class="education-type_container" id="educationLevelContainer" style="display:none">
-			<?php 
+				<?php
 				//level_idsi olmayanlar gelmesin 
-				$query = "SELECT DISTINCT level_id FROM egitimlerimiz_filter WHERE level_id IS NOT NULL AND kategoriler LIKE '%$kategori_adi%'";
-				$level_list = $db->rawQuery($query);				
-				foreach ($level_list as $level) { 
-					if($level['level_id']==1){
+				$query = "SELECT DISTINCT level_id FROM education_list WHERE level_id IS NOT NULL AND kategoriler LIKE '%$kategori_adi%'";
+				$level_list = $db->rawQuery($query);
+				foreach ($level_list as $level) {
+					if ($level['level_id'] == 1) {
 						$level_adi = "Başlangıç";
 					}
-					if($level['level_id']==2){
+					if ($level['level_id'] == 2) {
 						$level_adi = "Orta";
 					}
-					if($level['level_id']==3){
+					if ($level['level_id'] == 3) {
 						$level_adi = "İleri Seviye";
 					}
-				?>
-				<div style="margin-right:25px">
-					<input class="egitim-filtre" type="checkbox" id="<?php echo $level_adi ?>" name="<?php echo $level_adi ?>" value="<?php echo $level['level_id'] ?>">
-					<label for="<?php echo $level_adi ?>"><?php echo $level_adi ?></label><br>
-				</div>
+					?>
+					<div style="margin-right:25px">
+						<input class="egitim-filtre" type="checkbox" id="<?php echo $level_adi ?>"
+							name="<?php echo $level_adi ?>" value="<?php echo $level['level_id'] ?>">
+						<label for="<?php echo $level_adi ?>"><?php echo $level_adi ?></label><br>
+					</div>
 				<?php } ?>
 				<!-- <div style="margin-right:25px">
 					<input class="egitim-filtre" type="checkbox" id="baslangic" name="baslangic" value="1">
@@ -154,23 +154,25 @@ foreach ($results as $value) {
 				</div> -->
 			</div>
 			<div class="education-type_container" id="educationCategoryContainer" style="display:none">
-			
+
 			</div>
 			<div class="education-type_container" id="educationLocationContainer" style="display:none">
 				<?php
 				$query = "SELECT DISTINCT sehir_adi from egitimlerimiz_filter where sehir_adi IS NOT NULL AND kategoriler LIKE '%$kategori_adi%'";
 				$location_list = $db->rawQuery($query);
 				foreach ($location_list as $location) {
-					
-					if($location['sehir_adi']!='Elearning'){
+
+					if ($location['sehir_adi'] != 'Elearning') {
 						?>
-							<div class="egitim-filtre_container">
-							<div  style="display:flex; align-items:center">
-								<input class="egitim-filtre" type="checkbox" id="location_<?php echo $location['sehir_adi']; ?>" name="deneme" value="<?php echo $location['sehir_adi'] ?>">
+						<div class="egitim-filtre_container">
+							<div style="display:flex; align-items:center">
+								<input class="egitim-filtre" type="checkbox" id="location_<?php echo $location['sehir_adi']; ?>"
+									name="deneme" value="<?php echo $location['sehir_adi'] ?>">
 								<label for="location_<?php echo $location['sehir_adi']; ?>"><?php echo $location['sehir_adi']; ?></label><br>
 							</div>
-							</div>
-						<?php }}
+						</div>
+					<?php }
+				}
 				?>
 			</div>
 		</div>
@@ -193,8 +195,7 @@ foreach ($results as $value) {
 					Görüntüle</div>
 
 			</div>
-			<div style='padding:0px 20px; display:inline-block; background:#2d2d2d;'
-				class="tumunu_goruntule">
+			<div style='padding:0px 20px; display:inline-block; background:#2d2d2d;' class="tumunu_goruntule">
 				<div class="dahafazla tumunu_goruntule" style="color:#fff">Tümünü Görüntüle</div>
 			</div>
 		</div>
@@ -225,125 +226,130 @@ foreach ($results as $value) {
 	var selectedLocations;
 	var page_url;
 	var searchTerm;
-	$('.tumunu_goruntule').click(function () {
+	document.addEventListener("DOMContentLoaded", function (event) {
 
-		searchTerm = $('#search-input').val();
-		page_url = $('#page_url').val();
-		var allPage = 1;
-		console.log(allPage);
-		$.ajax({
-			url: "/egitimlerimiz-2_filter.php",
-			type: "POST",
-			data: {
-				selectedTypes: selectedTypes,
-				selectedCategories: selectedCategories,
-				selectedLocations:selectedLocations,
-				allPage: allPage,
-				page_url: page_url,
-				searchTerm: searchTerm,
-			},
-			success: function (cevap) {
-				$('.list-filters-items').html(cevap);
-			},
+		$('.tumunu_goruntule').click(function () {
+
+			searchTerm = $('#search-input').val();
+			page_url = $('#page_url').val();
+			var allPage = 1;
+			console.log(allPage);
+			$.ajax({
+				url: "/egitimlerimiz-2_filter.php",
+				type: "POST",
+				data: {
+					selectedTypes: selectedTypes,
+					selectedCategories: selectedCategories,
+					selectedLocations: selectedLocations,
+					allPage: allPage,
+					page_url: page_url,
+					searchTerm: searchTerm,
+				},
+				success: function (cevap) {
+					$('.list-filters-items').html(cevap);
+				},
+			});
 		});
-	});
-	//arama butonu tıklandıgında
+		//arama butonu tıklandıgında
 
-	$('.search-icon__education-type').click(function () {
-		selectedTypes = [];
-		selectedCategories = [];
-		selectedLocations = [];
-		pagination = 1;
-		searchTerm = $('#search-input').val();
-		page_url = $('#page_url').val();
+		$('.search-icon__education-type').click(function () {
+			selectedTypes = [];
+			selectedCategories = [];
+			selectedLocations = [];
+			pagination = 1;
+			searchTerm = $('#search-input').val();
+			page_url = $('#page_url').val();
 
-		// Burada searchTerm değişkeni ile input alanındaki değeri alıyoruz.
-		console.log(searchTerm);
-		$.ajax({
-			url: "/egitimlerimiz-2_filter.php",
-			type: "POST",
-			data: {
-				searchTerm, searchTerm,
-				page_url: page_url,
-				pagination: pagination,
-			},
-			success: function (cevap) {
-				$('.list-filters-items').html(cevap);
-			},
+			// Burada searchTerm değişkeni ile input alanındaki değeri alıyoruz.
+			console.log(searchTerm);
+			$.ajax({
+				url: "/egitimlerimiz-2_filter.php",
+				type: "POST",
+				data: {
+					searchTerm, searchTerm,
+					page_url: page_url,
+					pagination: pagination,
+				},
+				success: function (cevap) {
+					$('.list-filters-items').html(cevap);
+				},
+			});
+			// Arama sayfasına yönlendiriyoruz ve URL'e searchTerm değerini ekliyoruz.
 		});
-		// Arama sayfasına yönlendiriyoruz ve URL'e searchTerm değerini ekliyoruz.
-	});
-	//eğitimleri filterle çek
-	$('.education-type_container input[type=checkbox]').on('change', function () {
-		pagination = 1;
+		//eğitimleri filterle çek
+		$('.education-type_container input[type=checkbox]').on('change', function () {
+			pagination = 1;
 
-		selectedTypes = [];
-		selectedCategories = [];
-		selectedLocations = [];
-		$('.education-type_container input[type=checkbox]:checked').each(function () {
-			if ($(this).closest('.education-type_container').attr('id') == 'educationTypeContainer') {
-				selectedTypes.push($(this).val());
-			}
-			if ($(this).closest('.education-type_container').attr('id') == 'educationCategoryContainer') {
-				selectedCategories.push($(this).val());
-			}
-			if ($(this).closest('.education-type_container').attr('id') == 'educationLevelContainer') {
-				selectedTypes.push($(this).val());
-			}
-			if ($(this).closest('.education-type_container').attr('id') == 'educationLocationContainer') {
-				selectedLocations.push($(this).val());
-			}
+			selectedTypes = [];
+			selectedCategories = [];
+			selectedLocations = [];
+			$('.education-type_container input[type=checkbox]:checked').each(function () {
+				if ($(this).closest('.education-type_container').attr('id') == 'educationTypeContainer') {
+					selectedTypes.push($(this).val());
+				}
+				if ($(this).closest('.education-type_container').attr('id') == 'educationCategoryContainer') {
+					selectedCategories.push($(this).val());
+				}
+				if ($(this).closest('.education-type_container').attr('id') == 'educationLevelContainer') {
+					selectedTypes.push($(this).val());
+				}
+				if ($(this).closest('.education-type_container').attr('id') == 'educationLocationContainer') {
+					selectedLocations.push($(this).val());
+				}
+			});
+			console.log(pagination);
+			console.log(selectedTypes);
+			console.log(selectedCategories);
+			console.log(selectedLocations);
+			page_url = $('#page_url').val();
+
+			$.ajax({
+				url: "/egitimlerimiz-2_filter.php",
+				type: "POST",
+				data: {
+					selectedTypes: selectedTypes,
+					selectedCategories: selectedCategories,
+					selectedLocations: selectedLocations,
+					pagination: pagination,
+					page_url: page_url,
+
+				},
+				success: function (cevap) {
+					$('.list-filters-items').html(cevap);
+				},
+			});
 		});
-		console.log(pagination);
-		console.log(selectedTypes);
-		console.log(selectedCategories);
-		console.log(selectedLocations);
-		page_url = $('#page_url').val();
-
-		$.ajax({
-			url: "/egitimlerimiz-2_filter.php",
-			type: "POST",
-			data: {
-				selectedTypes: selectedTypes,
-				selectedCategories: selectedCategories,
-				selectedLocations:selectedLocations,
-				pagination: pagination,
-				page_url: page_url,
-
-			},
-			success: function (cevap) {
-				$('.list-filters-items').html(cevap);
-			},
+		$('#ileri_paginate').click(function () {
+			console.log("ss");
+			// Your code here
 		});
-	});
-	$('#ileri_paginate').click(function () {
-		console.log("ss");
-		// Your code here
-	});
-	//sayfa yüklendiği anda tüm eğitimleri çek
-	$(document).ready(function () {
-		pagination = 1;
-		//path deki degeri alalım
-		page_url = $('#page_url').val();
 
-		console.log(pagination);
-		console.log(page_url);
-		page_url = $('#page_url').val();
 
-		$.ajax({
-			url: "/egitimlerimiz-2_filter.php",
-			type: "POST",
-			data: {
-				pagination: pagination,
-				page_url: page_url,
+		//sayfa yüklendiği anda tüm eğitimleri çek
+		$(document).ready(function () {
+			pagination = 1;
+			//path deki degeri alalım
+			page_url = $('#page_url').val();
 
-			},
-			success: function (cevap) {
-				$('.list-filters-items').html(cevap);
-			},
+			console.log(pagination);
+			console.log(page_url);
+			page_url = $('#page_url').val();
+
+			$.ajax({
+				url: "/egitimlerimiz-2_filter.php",
+				type: "POST",
+				data: {
+					pagination: pagination,
+					page_url: page_url,
+
+				},
+				success: function (cevap) {
+					$('.list-filters-items').html(cevap);
+				},
+			});
 		});
-	});
 
+	});
 	function filter_next_page() {
 		pagination = pagination + 1;
 		console.log(pagination);
@@ -355,7 +361,7 @@ foreach ($results as $value) {
 			data: {
 				selectedTypes: selectedTypes,
 				selectedCategories: selectedCategories,
-				selectedLocations:selectedLocations,
+				selectedLocations: selectedLocations,
 				pagination: pagination,
 				page_url: page_url,
 				searchTerm: searchTerm,
@@ -378,7 +384,7 @@ foreach ($results as $value) {
 				data: {
 					selectedTypes: selectedTypes,
 					selectedCategories: selectedCategories,
-					selectedLocations:selectedLocations,
+					selectedLocations: selectedLocations,
 					pagination: pagination,
 					page_url: page_url,
 				},

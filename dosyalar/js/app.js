@@ -3,6 +3,7 @@ $(document).ready(function () {
         afterLoad();
     });
 });
+
 window.growl = function (text, type, title) {
     type = typeof (type) !== 'undefined' ? type : 'success';
     title = typeof (title) !== 'undefined' ? title : 'Tebrikler';
@@ -459,6 +460,7 @@ function afterLoad() {
     });
 
 }
+document.addEventListener("DOMContentLoaded", function (event) {
 
 const egitimProgramlari = document.getElementById('egitimProgramlari');
 const altmenu = document.getElementById('altmenu');
@@ -471,12 +473,11 @@ const yoneticiEgitimleri = document.getElementById('yonetici_egitimleri_1');
 const elearning = document.getElementById('e-learning');
 const mobilMenu = document.getElementById('mobil-profil-menu');
 const profilGoruntule = document.getElementById('profil-goruntule');
-const cozumOrtak = document.getElementById('cozum_ortakligi_platformu_1');
 const altMenuLi = document.getElementsByClassName('main-altmenu__li');
 
 egitimProgramlari.addEventListener('click', function () {
     if (altmenu.style.display == 'block') {
-        altmenu.style.display = 'none'
+        altmenu.style.display = 'none' 
     } else {
         altmenu.style.display = 'block'
     }
@@ -509,8 +510,7 @@ for (var i = 0; i < subList.length; i++) {
 
 
 for (var i = 0; i < altMenuLi.length; i++) {
-    altMenuLi[i].addEventListener("click", function () {
-        console.log(altMenuLi[i])
+    altMenuLi[i].addEventListener("click", function (event) {
         for (var j = 0; j < altMenuLi.length; j++) {
             altMenuLi[j].classList.remove("selected-altMenuLi");
         }
@@ -524,28 +524,19 @@ for (let i = 0; i < altmenuTitle.length; i++) {
             anotherFilter.style.display = "block";
             yoneticiEgitimleri.style.display = "none";
             elearning.style.display = "none";
-            cozumOrtak.style.display = "none";
         } else if (altmenuTitle[i].id == "yonetici_egitimleri") {
             yoneticiEgitimleri.style.display = "block";
             anotherFilter.style.display = "none";
             elearning.style.display = "none";
-            cozumOrtak.style.display = "none";
         } else if (altmenuTitle[i].id == "elearning_filter") {
             elearning.style.display = "block";
-            cozumOrtak.style.display = "none";
             yoneticiEgitimleri.style.display = "none";
             anotherFilter.style.display = "none";
         } else if (altmenuTitle[i].id == "sirket_kurumlar") {
             anotherFilter.style.display = "none";
             elearning.style.display = "none";
             yoneticiEgitimleri.style.display = "none";
-            cozumOrtak.style.display = "none";
-        } else if (altmenuTitle[i].id == "cozum_ortakligi_platformu") {
-            cozumOrtak.style.display = "block";
-            anotherFilter.style.display = "none";
-            elearning.style.display = "none";
-            yoneticiEgitimleri.style.display = "none";
-        }
+        } 
     });
 };
 
@@ -564,7 +555,7 @@ for (let i = 0; i < altmenuTitle.length; i++) {
         }
     });
 }
-
+});
 // SocialThinks
 window.addEventListener('load', function (event) {
 
@@ -1944,53 +1935,9 @@ function ozet_gonder() {
     }
 
 }
-$('.sub-list').click(function () {
-    var category_id = $(this).attr('id'); // Tıklanan öğenin id'sini alın
-    $.ajax({
-        url: 'header.php', // Verileri alacağınız URL
-        type: 'POST',
-        data: { category_id: category_id }, // İstek için kategori id'sini gönderin
-        //   success: function(data) {
-        //     $('#childAltmenu').html(data); // İstekten gelen verileri childAltmenu öğesinin içine yerleştirin
-        //   }
-    });
-});
 
 
-$(document).ready(function () {
-    // Checkbox alanlarında değişiklik olduğunda
-    $("#educationTypeContainer input[type='checkbox']").change(function () {
-        // Filtreleme fonksiyonunu çağır
-        getFilteredData();
-        console.log("merhaba");
-    });
 
-
-    // AJAX çağrısı yaparak verileri filtrele
-    function getFilteredData() {
-        // Seçili checkbox değerlerini al
-        var types = $("#educationTypeContainer input[type='checkbox']:checked").map(function () {
-            return $(this).val();
-        }).get();
-        //   var levels = $("#educationLevelContainer input[type='checkbox']:checked").map(function() {
-        //     return $(this).val();
-        //   }).get();
-
-        // AJAX çağrısı yaparak verileri filtrele
-        $.ajax({
-            url: "/index.php",
-            type: "POST",
-            data: {
-                types: types
-
-            },
-            success: function (response) {
-                // Filtrelenmiş verileri ekrana yazdır
-                $("#education-calendar").html(response);
-            }
-        });
-    }
-});
 
 let menuState = false;
 

@@ -11,53 +11,44 @@ $kategori_seo_url = $page_url[$page_categories_url];
 $page_url = end($page_url);
 $page_url = t_decode($page_url);
 $db->where('seo_url', $page_url);
-$results = $db->get('education_calender_list');
-foreach ($results as $value) {
-	$id=$value['id'];
-	$edu_id=$value['edu_id'];
-	$resim=$value['resim'];
-	$aciklama=t_decode($value['edu_aciklama']);
-	$resim_alt_etiket=$value['resim_alt_etiket'];
-	$konum=$value['konum'];
-	$adres=$value['adres'];
-	$sehir=$value['sehir_adi'];
-	$egitim_suresi=$value['egitim_suresi'];
-	$egitim_tarih=$value['egitim_tarih'];
-	$baslangic_saat=$value['baslangic_saat'];
-	$bitis_saat=$value['bitis_saat'];
-	$ucret=$value['ucret'];
-	$egitim_adi=$value['egitim_adi'];
-	$etiketler=$value['etiketler'];
-	$webex=$value['webex'];
-	$webex_url=$value['webex_url'];
-	$durum=$value['durum'];
-	$seo_url=$value['seo_url'];
-	$education_seo_url=$value['education_seo_url'];
-	$types=$value['types'];
-	// $kimler_katilmali=t_decode($value['kimler_katilmali']);
-	// $neden_katilmali=t_decode($value['neden_katilmali']);
-	//geçici edit***************** üstteki 2 veriyi education_listten alacagız.
-	$db->where('id',$edu_id);
-	$result=$db->getOne('education');
-	$kimler_katilmali=t_decode($result['kimler_katilmali']);
-	$neden_katilmali=t_decode($result['neden_katilmali']);
-	$not=t_decode($result['not']);
+$results = $db->getOne('open_education_list');
+	$id=$results['id'];
+	$edu_id=$results['edu_id'];
+	$resim=$results['resim'];
+	$konum=$results['konum'];
+	$adres=$results['adres'];
+	$sehir=$results['sehir_adi'];
+	$egitim_suresi=$results['egitim_suresi'];
+	$egitim_tarih=$results['egitim_tarih'];
+	$baslangic_saat=$results['baslangic_saat'];
+	$bitis_saat=$results['bitis_saat'];
+	$ucret=$results['ucret'];
+	$egitim_adi=$results['egitim_adi'];
+	$etiketler=$results['etiketler'];
+	$webex=$results['webex'];
+	$webex_url=$results['webex_url'];
+	$durum=$results['durum'];
+	$seo_url=$results['seo_url'];
+	$types=$results['types'];
+	$kimler_katilmali=t_decode($results['kimler_katilmali']);
+	$neden_katilmali=t_decode($results['neden_katilmali']);
+	$aciklama=t_decode($results['aciklama']);
+	$video = $results['video']; 
+	$resim=$results['resim'];
+	$resim_alt_etiket=$results['resim_alt_etiket'];
+	$not=t_decode($results['not']);
+
 	//********* */
 	$etiketlerExplode = explode(",", $etiketler);
+	if($video <> "")
+	{
+		$links = explode("?v=", $video);
+		$video = $links[1];
+	}
 
-}
 
-// get education info
-$db->where('id', $edu_id);
-$education = $db->getOne('education');
-$video = $education['video'];
-if($video <> "")
-{
-	$links = explode("?v=", $video);
-	$video = $links[1];
-}
 
-$tarih_suan = date("Y-m-d");
+
 
 
 $db->where('seo_url', $kategori_seo_url);
